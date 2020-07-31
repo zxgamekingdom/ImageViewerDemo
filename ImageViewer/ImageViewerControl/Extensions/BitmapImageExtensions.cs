@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows.Media.Imaging;
 
 namespace ImageViewer.ImageViewerControl.Extensions
 {

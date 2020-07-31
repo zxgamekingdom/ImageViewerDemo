@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace ImageViewer.ImageViewerControl.Extensions
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
+   
     internal static class ControlExtensions
     {
         public static (double x, double y) GetCanvasXY(

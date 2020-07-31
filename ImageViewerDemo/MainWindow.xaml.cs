@@ -55,7 +55,7 @@ namespace ImageViewerDemo
             var bitmapImage = new BitmapImage(new Uri(
                 @"C:\Users\Taurus Zhou\Downloads\b4979074ad8058e0e7d2c89a6e8d930b.jpg"));
             _image = new Image {Source = bitmapImage};
-            canvas!.Children.Add(_image);
+            canvas.Children.Add(_image);
             canvas.Width = bitmapImage.Width * 1000;
             canvas.Height = bitmapImage.Height * 1000;
             double x = canvas.Width / 2 - bitmapImage.Width / 2;
@@ -94,11 +94,11 @@ namespace ImageViewerDemo
                 if (_buffPath == null)
                 {
                     _buffPath = path;
-                    canvas!.Children.Add(_buffPath);
+                    canvas.Children.Add(_buffPath);
                 }
                 else
                 {
-                    Path single = canvas!.Children.OfType<Path>()
+                    Path single = canvas.Children.OfType<Path>()
                         .Single(path1 => path1 == _buffPath);
                     single.SetFrom(path);
                 }
@@ -148,8 +148,8 @@ namespace ImageViewerDemo
         private void ToggleButtons_OnClick(object sender, RoutedEventArgs e)
         {
             var toggleButton = sender as ToggleButton;
-            WrapPanel wrapPanel = toggleButton!.Parent as WrapPanel;
-            foreach (ToggleButton button in wrapPanel!.Children.OfType<ToggleButton>())
+            WrapPanel wrapPanel = toggleButton.Parent as WrapPanel;
+            foreach (ToggleButton button in wrapPanel.Children.OfType<ToggleButton>())
                 if (button != toggleButton)
                     button.IsChecked = false;
         }

@@ -21,7 +21,7 @@ namespace ImageViewer.ImageViewerControl.RoiControls
             double height,
             ImageViewer imageViewer)
         {
-            if (!imageViewer.IsImageLoaded)
+            if (imageViewer.IsImageLoaded == false)
             {
                 throw new ImageNotLoadedException();
             }
