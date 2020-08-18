@@ -17,7 +17,9 @@ namespace ImageViewer.ImageViewerControl
             DataContext = imageViewer;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "RCS1001:Add braces (when expression spans over multiple lines).", Justification = "<挂起>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style",
+            "RCS1001:Add braces (when expression spans over multiple lines).",
+            Justification = "<挂起>")]
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private void ToggleButtons_OnChecked(object sender, RoutedEventArgs e)
         {

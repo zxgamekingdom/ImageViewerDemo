@@ -13,36 +13,54 @@ namespace ImageViewer.ImageViewerControl
 {
     public class ImageViewer : ContentControl
     {
+        /// <summary>
+        /// 是否修改ROI 
+        /// </summary>
         public static readonly DependencyProperty IsModifyRoiProperty =
             DependencyProperty.Register(nameof(IsModifyRoi),
                 typeof(bool),
                 typeof(ImageViewer),
                 new PropertyMetadata(default(bool)));
 
+        /// <summary>
+        /// 是否移动与缩放ROI
+        /// </summary>
         public static readonly DependencyProperty IsMoveAndScaleProperty =
             DependencyProperty.Register(nameof(IsMoveAndScale),
                 typeof(bool),
                 typeof(ImageViewer),
                 new PropertyMetadata(default(bool)));
 
+        /// <summary>
+        /// 是否画矩形ROI
+        /// </summary>
         public static readonly DependencyProperty IsRectangleProperty =
             DependencyProperty.Register(nameof(IsRectangle),
                 typeof(bool),
                 typeof(ImageViewer),
                 new PropertyMetadata(default(bool)));
 
+        /// <summary>
+        /// 是否画旋转矩形ROI
+        /// </summary>
         public static readonly DependencyProperty IsRotateRectangleProperty =
             DependencyProperty.Register(nameof(IsRotateRectangle),
                 typeof(bool),
                 typeof(ImageViewer),
                 new PropertyMetadata(default(bool)));
 
+        /// <summary>
+        /// 最大缩放倍数
+        /// </summary>
         public static readonly DependencyProperty MaxScaleProperty =
             DependencyProperty.Register(nameof(MaxScale),
                 typeof(double),
                 typeof(ImageViewer),
                 new PropertyMetadata((double) 10));
 
+        /// <summary>
+        /// 最小缩放倍数
+        /// </summary>
         public static readonly DependencyProperty MinScaleProperty =
             DependencyProperty.Register(nameof(MinScale),
                 typeof(double),
@@ -50,20 +68,24 @@ namespace ImageViewer.ImageViewerControl
                 new PropertyMetadata(0.00000000001));
 
         /// <summary>
-        ///     缩放系数的依赖属性
+        ///     缩放系数,一次缩放多少倍
         /// </summary>
         public static readonly DependencyProperty ScaleFactorProperty =
             DependencyProperty.Register(nameof(ScaleFactor),
                 typeof(double),
                 typeof(ImageViewer),
                 new PropertyMetadata(0.05));
-
+        /// <summary>
+        /// 缩放倍数
+        /// </summary>
         internal static readonly DependencyProperty ScaleProperty =
             DependencyProperty.Register(nameof(Scale),
                 typeof(double),
                 typeof(ImageViewer),
                 new PropertyMetadata((double) 1));
-
+        /// <summary>
+        /// 图片是否已经加载
+        /// </summary>
         private static readonly DependencyProperty IsImageLoadedProperty =
             DependencyProperty.Register(nameof(IsImageLoaded),
                 typeof(bool),
@@ -183,23 +205,29 @@ namespace ImageViewer.ImageViewerControl
             ImmutableArray<RoiControl> _roiShapes = GetRoi();
             if (_roiShapes.Length != 0)
             {
-                RoiControl roiControl = _roiShapes.Last();
-                InCanvas.Children.Remove(roiControl);
+                InCanvas.Children.Remove(_roiShapes.Last());
             }
         }
 
         /// <summary>
         ///     override OnInitialized
         /// </summary>
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            Initialization_Layout_ChildrenControl();
+        }
+
+        /// <summary>
+        /// 初始化并布局子空间
         /// <remarks>
         ///     初始化此控件。 此控件的结构为： Gird分为两行，第一行存放着_outCanvas，第二行存放着该控件的一些功能选择按钮，例如是否缩放、移动图片等等。
         ///     _outCanvas包含着_inCanvas。
         ///     _inCanvas包含着_image。
         /// </remarks>
-        /// <param name="e"> </param>
-        protected override void OnInitialized(EventArgs e)
+        /// </summary>
+        private void Initialization_Layout_ChildrenControl()
         {
-            base.OnInitialized(e);
             var grid = new Grid
             {
                 RowDefinitions =
@@ -216,7 +244,7 @@ namespace ImageViewer.ImageViewerControl
             };
             grid.Children.Add(OutCanvas);
             OutCanvas.Children.Add(InCanvas);
-            var controlPanel = new ControlPanel(this);
+            ControlPanel controlPanel = new ControlPanel(this);
             grid.Children.Add(controlPanel);
             Grid.SetRow(controlPanel, 1);
         }
@@ -234,10 +262,15 @@ namespace ImageViewer.ImageViewerControl
             Justification = "<挂起>")]
         private void SetInsideControlsInfo_When_LoadImage(BitmapImage bitmapImage)
         {
-            if (Image != null)
-                InCanvas.Children.Remove(Image);
-            Image = new Image {Source = bitmapImage};
-            InCanvas.Children.Add(Image);
+            Scale = 1;
+            if (Image == null)
+            {
+                Image = new Image {Source = bitmapImage};
+                InCanvas.Children.Add(Image);
+            }
+            else
+                Image.Source = bitmapImage;
+
             (double width, double height) = bitmapImage.GetWH();
             Image.SetWH(width, height);
             InCanvas.RenderTransform = new ScaleTransform(1, 1);

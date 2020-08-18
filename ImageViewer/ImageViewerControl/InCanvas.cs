@@ -13,6 +13,8 @@ namespace ImageViewer.ImageViewerControl
         private Point _buffPoint;
 
         private RoiControl _buffRoiControl;
+
+
         public InCanvas(ImageViewer imageViewer)
         {
             _imageViewer = imageViewer;
@@ -27,6 +29,7 @@ namespace ImageViewer.ImageViewerControl
                 _buffRoiControl = default;
             }
         }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -43,7 +46,8 @@ namespace ImageViewer.ImageViewerControl
                     _imageViewer.AddRoi(_buffRoiControl);
                 }
 
-                RectangleRoiControl rectangleRoiControl = Children.OfType<RectangleRoiControl>()
+                RectangleRoiControl rectangleRoiControl = Children
+                    .OfType<RectangleRoiControl>()
                     .Single(roi => roi == _buffRoiControl);
                 rectangleRoiControl.SetPositionAndSize(x, y, width, height);
             }

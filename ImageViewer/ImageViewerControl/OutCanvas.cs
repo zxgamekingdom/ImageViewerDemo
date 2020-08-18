@@ -13,23 +13,15 @@ namespace ImageViewer.ImageViewerControl
         private readonly InCanvas _inCanvas;
         private Point _buffPoint;
 
-        public OutCanvas(ImageViewer imageViewer)
-        {
-            _imageViewer = imageViewer ??
-                           throw new ArgumentNullException(nameof(imageViewer));
-            _inCanvas = imageViewer.InCanvas;
-        }
-
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
             if (IsMoveAndScaleConditionOk(e))
                 _buffPoint = e.GetPosition(this);
+            base.OnMouseDown(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
             if (IsMoveAndScaleConditionOk(e))
             {
                 Point position = e.GetPosition(this);
@@ -39,6 +31,8 @@ namespace ImageViewer.ImageViewerControl
                 _inCanvas.SetCanvasXY(newX, newY);
                 _buffPoint = position;
             }
+
+            base.OnMouseMove(e);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Readability",
@@ -46,7 +40,6 @@ namespace ImageViewer.ImageViewerControl
             Justification = "<挂起>")]
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            base.OnMouseWheel(e);
             if (_imageViewer.IsMoveAndScale)
             {
                 (double scale, double scaleFactor, double minScale, double maxScale) =
@@ -60,6 +53,8 @@ namespace ImageViewer.ImageViewerControl
                     _inCanvas.RenderTransform = new ScaleTransform(d, d);
                 }
             }
+
+            base.OnMouseWheel(e);
         }
 
         private bool IsMoveAndScaleConditionOk(MouseButtonEventArgs e)
@@ -74,6 +69,13 @@ namespace ImageViewer.ImageViewerControl
             return _imageViewer.IsMoveAndScale &&
                    (e.LeftButton == MouseButtonState.Pressed ||
                     e.RightButton == MouseButtonState.Pressed);
+        }
+
+        public  OutCanvas(ImageViewer imageViewer)
+        {
+            _imageViewer = imageViewer ??
+                           throw new ArgumentNullException(nameof(imageViewer));
+            _inCanvas = imageViewer.InCanvas;
         }
     }
 }
