@@ -13,8 +13,7 @@ namespace ImageViewer.ImageViewerControl
 {
     public class ImageViewer : ContentControl
     {
-        public static readonly DependencyProperty IsImageLoadedProperty =
-            IsImageLoadedPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty IsImageLoadedProperty;
 
         /// <summary>
         ///     是否修改ROI
@@ -23,7 +22,8 @@ namespace ImageViewer.ImageViewerControl
             DependencyProperty.Register(nameof(IsModifyRoi),
                 typeof(bool),
                 typeof(ImageViewer),
-                new PropertyMetadata(default(bool)));
+                new PropertyMetadata(default(bool),
+                    IsModifyRoiPropertyChangedCallback));
 
         /// <summary>
         ///     是否移动与缩放ROI
@@ -79,6 +79,13 @@ namespace ImageViewer.ImageViewerControl
                 typeof(ImageViewer),
                 new PropertyMetadata(0.05));
 
+        public static readonly DependencyProperty SelectInsideOrOutlineProperty =
+            DependencyProperty.Register(nameof(SelectInsideOrOutline),
+                typeof(bool),
+                typeof(ImageViewer),
+                new PropertyMetadata(default(bool),
+                    SelectOutlineOrInsidePropertyChangedCallback));
+
         /// <summary>
         ///     缩放倍数
         /// </summary>
@@ -92,7 +99,7 @@ namespace ImageViewer.ImageViewerControl
         ///     图片是否已经加载
         /// </summary>
         private static readonly DependencyPropertyKey IsImageLoadedPropertyKey =
-            DependencyProperty.RegisterReadOnly(nameof(IsImageLoadedKey),
+            DependencyProperty.RegisterReadOnly(nameof(IsImageLoaded),
                 typeof(bool),
                 typeof(ImageViewer),
                 new PropertyMetadata(default(bool)));
@@ -101,7 +108,12 @@ namespace ImageViewer.ImageViewerControl
         internal InCanvas InCanvas;
         internal OutCanvas OutCanvas;
 
-        public bool IsImageLoaded => IsImageLoadedKey;
+        static ImageViewer()
+        {
+            IsImageLoadedProperty = IsImageLoadedPropertyKey.DependencyProperty;
+        }
+
+        public bool IsImageLoaded => (bool) GetValue(IsImageLoadedProperty);
 
         public bool IsModifyRoi
         {
@@ -152,6 +164,18 @@ namespace ImageViewer.ImageViewerControl
         {
             get => (double) GetValue(ScaleFactorProperty);
             set => SetValue(ScaleFactorProperty, value);
+        }
+
+        /// <summary>
+        ///     当需要修改ROI时,点击ROI的轮廓还是内部可以选中ROI
+        /// </summary>
+        /// <remarks>
+        /// true为点击ROI内部选中ROI,false为点击ROI轮廓选中ROI
+        /// </remarks>
+        public bool SelectInsideOrOutline
+        {
+            get => (bool) GetValue(SelectInsideOrOutlineProperty);
+            set => SetValue(SelectInsideOrOutlineProperty, value);
         }
 
         private bool IsImageLoadedKey
@@ -220,6 +244,30 @@ namespace ImageViewer.ImageViewerControl
             Initialization_Layout_ChildrenControl();
         }
 
+        private static void IsModifyRoiPropertyChangedCallback(DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            var imageViewer = (ImageViewer) d;
+            if (imageViewer.IsModifyRoi == false)
+                foreach (RoiControl roiControl in imageViewer.GetRoi())
+                    roiControl.IsSelected = false;
+        }
+
+        private static void SelectOutlineOrInsidePropertyChangedCallback(
+            DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            var viewer = (ImageViewer) d;
+            ImmutableList<RoiControl> controls = viewer.GetRoi()
+                .Where(control => control.ContentPath != null)
+                .ToImmutableList();
+            viewer.SelectInsideOrOutline.WriteLine();
+            if (viewer.SelectInsideOrOutline)
+                controls.ForEach(control => control.ContentPath.SetRoiPathNullFill());
+            else
+                controls.ForEach(control => control.ContentPath.SetRoiPathFill());
+        }
+
         /// <summary>
         ///     初始化并布局子空间
         ///     <remarks>
@@ -246,7 +294,7 @@ namespace ImageViewer.ImageViewerControl
             };
             grid.Children.Add(OutCanvas);
             OutCanvas.Children.Add(InCanvas);
-            ControlPanel controlPanel = new ControlPanel(this);
+            var controlPanel = new ControlPanel(this);
             grid.Children.Add(controlPanel);
             Grid.SetRow(controlPanel, 1);
         }

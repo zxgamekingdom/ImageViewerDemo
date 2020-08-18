@@ -4,11 +4,9 @@ using System.Windows.Controls;
 
 namespace ImageViewer.ImageViewerControl.Extensions
 {
-   
     internal static class ControlExtensions
     {
-        public static (double x, double y) GetCanvasXY(
-            this FrameworkElement frameworkElement)
+        public static (double x, double y) GetCanvasXY(this UIElement frameworkElement)
         {
             double x = Canvas.GetLeft(frameworkElement);
             double y = Canvas.GetTop(frameworkElement);
@@ -25,7 +23,7 @@ namespace ImageViewer.ImageViewerControl.Extensions
             return (width, height);
         }
 
-        public static void SetCanvasXY(this FrameworkElement frameworkElement,
+        public static void SetCanvasXY(this UIElement frameworkElement,
             double left,
             double top)
         {

@@ -1,5 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using ImageViewer.ImageViewerControl.RoiControls.Adorner;
+using ImageViewer.ImageViewerControl.RoiControls.Extensions;
 using ImageViewer.ImageViewerControl.RoiShapes;
 
 namespace ImageViewer.ImageViewerControl.RoiControls
@@ -14,13 +20,39 @@ namespace ImageViewer.ImageViewerControl.RoiControls
 
         protected internal ImageViewer ImageViewer;
 
-        public static readonly DependencyProperty IsSelectedProperty =
+        internal static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register(nameof(IsSelected),
                 typeof(bool),
                 typeof(RoiControl),
-                new PropertyMetadata(default(bool)));
+                new PropertyMetadata(default(bool), IsSelectedPropertyChangedCallback));
 
-        public bool IsSelected
+        private static void IsSelectedPropertyChangedCallback(DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            var roiControl = (RoiControl) d;
+            AdornerLayer layer = roiControl.AdornerLayer;
+            System.Windows.Documents.Adorner[] adorners = layer.GetAdorners(roiControl);
+            if (roiControl.IsSelected)
+            {
+                foreach (System.Windows.Documents.Adorner adorner in adorners)
+                {
+                    adorner.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                foreach (System.Windows.Documents.Adorner adorner in adorners)
+                {
+                    adorner.Visibility = Visibility.Collapsed;
+                }
+            }
+
+            roiControl.IsSelected.WriteLine();
+        }
+
+        protected AdornerLayer AdornerLayer;
+
+        internal bool IsSelected
         {
             get => (bool) GetValue(IsSelectedProperty);
             set => SetValue(IsSelectedProperty, value);
@@ -29,6 +61,23 @@ namespace ImageViewer.ImageViewerControl.RoiControls
         protected RoiControl(ShapeType shapeType)
         {
             Type = shapeType;
+        }
+
+        protected abstract RoiControlAdorner GetRoiControlAdorner();
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            if (AdornerLayer == null)
+            {
+                AdornerLayer layer = this.GetAdornerLayer();
+                layer.Add(GetRoiControlAdorner());
+                foreach (System.Windows.Documents.Adorner adorner in layer.GetAdorners(
+                    this))
+                    adorner.Visibility = Visibility.Collapsed;
+                AdornerLayer = layer;
+            }
+
+            base.OnRender(drawingContext);
         }
 
         public ShapeType Type
@@ -46,6 +95,19 @@ namespace ImageViewer.ImageViewerControl.RoiControls
             return RectangleRoiControl.CreateRoi(x, y, width, height, imageViewer);
         }
 
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (ImageViewer.IsModifyRoi)
+            {
+                foreach (RoiControl roiControl in ImageViewer.GetRoi())
+                    roiControl.IsSelected = false;
+                IsSelected = true;
+            }
+
+            base.OnMouseDown(e);
+        }
+
+        public Path ContentPath => Content as Path;
         public abstract RoiShape GetRoiShape();
     }
 }

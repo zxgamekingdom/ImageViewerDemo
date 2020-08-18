@@ -8,16 +8,38 @@
     d:DataContext="{d:DesignInstance imageViewerControl:ImageViewer}"
     x:ClassModifier="internal"
     mc:Ignorable="d">
-    <WrapPanel IsEnabled="{Binding IsImageLoadedKey}">
-        <WrapPanel.Resources>
-            <Style TargetType="ToggleButton">
-                <EventSetter Event="Checked" Handler="ToggleButtons_OnChecked" />
-            </Style>
-        </WrapPanel.Resources>
-        <ToggleButton Content="移动缩放图像" IsChecked="{Binding IsMoveAndScale, Mode=TwoWay}" />
-        <ToggleButton Content="修改Roi" IsChecked="{Binding IsModifyRoi, Mode=TwoWay}" />
-        <FrameworkElement Width="10" />
-        <ToggleButton Content="画矩形" IsChecked="{Binding IsRectangle, Mode=TwoWay}" />
-        <ToggleButton Content="画旋转矩形" IsChecked="{Binding IsRotateRectangle, Mode=TwoWay}" />
+    <WrapPanel>
+        <WrapPanel>
+            <ToggleButton
+                x:Name="SelectToggleButton"
+                Content="点击边框选中ROI"
+                IsChecked="{Binding SelectInsideOrOutline, Mode=TwoWay}">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content" Value="True" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content" Value="False" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+            <FrameworkElement Width="10" />
+        </WrapPanel>
+        <WrapPanel IsEnabled="{Binding IsImageLoaded}">
+            <WrapPanel.Resources>
+                <Style TargetType="ToggleButton">
+                    <EventSetter Event="Checked" Handler="ToggleButtons_OnChecked" />
+                </Style>
+            </WrapPanel.Resources>
+            <ToggleButton Content="移动缩放图像" IsChecked="{Binding IsMoveAndScale, Mode=TwoWay}" />
+            <ToggleButton Content="修改Roi" IsChecked="{Binding IsModifyRoi, Mode=TwoWay}" />
+            <FrameworkElement Width="10" />
+            <ToggleButton Content="画矩形" IsChecked="{Binding IsRectangle, Mode=TwoWay}" />
+            <ToggleButton Content="画旋转矩形" IsChecked="{Binding IsRotateRectangle, Mode=TwoWay}" />
+        </WrapPanel>
     </WrapPanel>
 </UserControl>

@@ -1,8 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using ImageViewer.ImageViewerControl.Extensions;
+using ImageViewer.ImageViewerControl.RoiControls.Adorner;
+using ImageViewer.ImageViewerControl.RoiControls.Extensions;
 using ImageViewer.ImageViewerControl.RoiShapes;
 
 namespace ImageViewer.ImageViewerControl.RoiControls
@@ -29,6 +32,11 @@ namespace ImageViewer.ImageViewerControl.RoiControls
             Image image = imageViewer.Image;
             (double dx, double dy) = image.GetCanvasXY();
             return new RectangleRoiControl(dx + x, dy + y, width, height);
+        }
+
+        protected override RoiControlAdorner GetRoiControlAdorner()
+        {
+            return new RectangleRoiControlAdorner(this);
         }
 
         /// <summary>
@@ -70,8 +78,9 @@ namespace ImageViewer.ImageViewerControl.RoiControls
             {
                 Data = new RectangleGeometry(new Rect(0, 0, width, height)),
                 StrokeThickness = 5,
-                Stroke = Brushes.DarkRed
+                Stroke = Brushes.DarkRed,
             };
+            ContentPath.SetRoiPathFill();
         }
     }
 }
