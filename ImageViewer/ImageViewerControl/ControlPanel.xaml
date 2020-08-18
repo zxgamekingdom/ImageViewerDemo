@@ -8,7 +8,7 @@
     d:DataContext="{d:DesignInstance imageViewerControl:ImageViewer}"
     x:ClassModifier="internal"
     mc:Ignorable="d">
-    <WrapPanel IsEnabled="{Binding IsImageLoaded}">
+    <WrapPanel IsEnabled="{Binding IsImageLoadedKey}">
         <WrapPanel.Resources>
             <Style TargetType="ToggleButton">
                 <EventSetter Event="Checked" Handler="ToggleButtons_OnChecked" />
