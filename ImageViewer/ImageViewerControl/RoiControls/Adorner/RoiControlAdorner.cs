@@ -8,7 +8,7 @@ namespace ImageViewer.ImageViewerControl.RoiControls.Adorner
     public abstract class RoiControlAdorner : System.Windows.Documents.Adorner
     {
         public static readonly DependencyPropertyKey ChildrenPropertyKey =
-            DependencyProperty.RegisterReadOnly(nameof(ChildrenKey),
+            DependencyProperty.RegisterReadOnly(nameof(Children),
                 typeof(VisualCollection),
                 typeof(RoiControlAdorner),
                 new PropertyMetadata(default(VisualCollection)));
