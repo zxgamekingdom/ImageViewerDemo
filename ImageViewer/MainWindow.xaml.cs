@@ -18,12 +18,12 @@ namespace ImageViewer
             InitializeComponent();
         }
 
-        private void TestButton_OnClick(object sender, RoutedEventArgs e)
+        private void 获取Roi的形状数据Button_OnClick(object sender, RoutedEventArgs e)
         {
             foreach (RectangleRoiControl rectangleRoi in Viewer.GetRoi()
                 .OfType<RectangleRoiControl>())
             {
-                var roiControl = rectangleRoi as RoiControl;
+                var roiControl = (RoiControl) rectangleRoi;
                 JsonSerializer.Serialize(roiControl.GetRoiShape() as RectangleRoiShape)
                     .WriteLine();
             }
@@ -47,6 +47,11 @@ namespace ImageViewer
         private void 添加RoiButton_OnClick(object sender, RoutedEventArgs e)
         {
             Viewer.AddRoi(RoiControl.CreateRectangleRoi(0, 0, 100, 100, Viewer));
+        }
+
+        private void 清空RoiButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Viewer.ClearRoi();
         }
     }
 }

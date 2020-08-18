@@ -19,10 +19,17 @@
         <StackPanel Grid.Row="1">
             <WrapPanel>
                 <Button
-                    x:Name="TestButton"
-                    Click="TestButton_OnClick"
-                    Content="测试" />
-                <Button Content="添加Roi" x:Name="添加RoiButton" Click="添加RoiButton_OnClick"></Button>
+                    x:Name="清空RoiButton"
+                    Click="清空RoiButton_OnClick"
+                    Content="清空ROI" />
+                <Button
+                    x:Name="获取Roi的形状数据Button"
+                    Click="获取Roi的形状数据Button_OnClick"
+                    Content="获取ROI的形状数据" />
+                <Button
+                    x:Name="添加RoiButton"
+                    Click="添加RoiButton_OnClick"
+                    Content="添加Roi" />
                 <Button
                     x:Name="加载图片Button"
                     Click="加载图片Button_OnClick"
