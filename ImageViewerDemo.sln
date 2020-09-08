@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageViewerDemo", "ImageVie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageViewer", "ImageViewer\ImageViewer.csproj", "{2F3A223E-5B79-4EA6-A93B-2AF198FF5D00}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RenderTransformImageViewerDemo", "RenderTransformImageViewerDemo\RenderTransformImageViewerDemo.csproj", "{8AD96D67-E117-43FA-8F84-7A4D36F95610}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2F3A223E-5B79-4EA6-A93B-2AF198FF5D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F3A223E-5B79-4EA6-A93B-2AF198FF5D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F3A223E-5B79-4EA6-A93B-2AF198FF5D00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD96D67-E117-43FA-8F84-7A4D36F95610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD96D67-E117-43FA-8F84-7A4D36F95610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD96D67-E117-43FA-8F84-7A4D36F95610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD96D67-E117-43FA-8F84-7A4D36F95610}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
